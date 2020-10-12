@@ -25,7 +25,7 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "packer/scripts/install_ansible.sh"
+      "script": "packer/scripts/install_ansible_ubuntu.sh"
     },
     {
       "type": "ansible-local",
@@ -33,10 +33,6 @@
       "role_paths": [
         "ansible/roles/git"
       ]
-    },
-    {
-      "type": "shell",
-      "script": "packer/scripts/cleanup.sh"
     }
   ]
 }
