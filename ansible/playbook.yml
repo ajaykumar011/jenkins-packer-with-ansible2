@@ -1,0 +1,11 @@
+---
+- name: Install Nodejs
+  hosts: all
+  become: yes
+
+  roles:
+      - mongo
+      - nodejs
+      - npm-pkg
+      - node-app
+      - ufw
