@@ -6,7 +6,7 @@
 
 AWS_REGION="us-east-1"
 
-ARTIFACT=`packer build -machine-readable packer-demo.json | awk -F, '$0 ~/artifact,0,id/ {print $6}'`
+ARTIFACT=`packer build -machine-readable template-amz2.json | awk -F, '$0 ~/artifact,0,id/ {print $6}'`
 echo "packer output:"
 cat packer-demo.json
 
