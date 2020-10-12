@@ -16,5 +16,5 @@ ubuntu
 # This is necessary because by default Ansible will try to use
 # /usr/bin/python, which is not available on newer Ubuntu versions.
 #########################################################################
-[ubuntu:vars]
+[all:vars]
 ansible_python_interpreter=/usr/bin/python3
