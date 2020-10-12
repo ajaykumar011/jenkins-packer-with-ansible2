@@ -5,7 +5,7 @@
     "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
     "region": "us-east-1",
     "ssh_username": "ubuntu",
-    "base_ami": "ami-0b5cb7048c06279ae",
+    "base_ami": "ami-013da1cc4ae87618c",
     "instance_type": "t2.micro",
     "image_type": "test"
 },
