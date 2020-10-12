@@ -31,7 +31,7 @@
       "type": "ansible-local",
       "playbook_file": "ansible/playbook.yml",
       "role_paths": [
-        "ansible/roles/git"
+        "ansible/roles"
       ]
     }
   ]
