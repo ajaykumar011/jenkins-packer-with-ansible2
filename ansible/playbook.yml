@@ -1,99 +1,90 @@
+##################################################
+# DO Community Playbooks: LEMP on Ubuntu 18.04
+##################################################
 ---
-# YAML documents begin with the document separator ---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
 
-# The minus in YAML this indicates a list item.  The playbook contains a list
-# of plays, with each play being a dictionary
--
-
-  # Target: where our play will run and options it will run with
-  hosts: all
-  become: yes
-
-  # Task: the list of tasks that will be executed within the play, this section
-  # can also be used for pre and post tasks
   tasks:
-    - name: Install EPEL
-      yum:
-        name: epel-release
-        update_cache: yes
-        state: latest
-      when: ansible_distribution == 'CentOS'
+    - name: Install Prerequisites
+      apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+      loop: [ 'aptitude' ]
 
-    - name: Install Nginx
-      package:
-        name: nginx
-        state: latest
-
-    - name: Install Patch
-      yum:
-        name: patch
-        update_cache: yes
-        state: latest
-      when: ansible_distribution == 'CentOS'
-
-    - name: Patch nginx.conf to include sites-available, disable default server entry
-      patch:
-        src: files/nginx.conf.centos.patch
-        dest: /etc/nginx/nginx.conf
-      when: ansible_distribution == 'CentOS'
-
-    - name: Create /etc/nginx/sites-available directory if required
-      file:
-        path: /etc/nginx/sites-available
-        state: directory
-
-    - name: Create /etc/nginx/sites-enabled directory if required
-      file:
-        path: /etc/nginx/sites-enabled
-        state: directory
-
-    - name: Copy default nginx configuration
-      copy:
-        src: files/nginx-default.conf
-        dest: /etc/nginx/sites-available/default
-
-    - name: Symbolic link /etc/nginx/sites-available/default to /etc/nginx/sites-enabled/default
-      file:
-        src: /etc/nginx/sites-available/default
-        dest: /etc/nginx/sites-enabled/default
-        state: link
-
-    - name: Create nginx/html directory if required
-      file:
-        path: /usr/share/nginx/html
-        state: directory
-
-    - name: Template index.html.j2 to index.html on target
+    - name: Install LEMP Packages
+      apt: name={{ item }} update_cache=yes state=latest
+      loop: [ 'nginx', 'mysql-server', 'python3-pymysql', 'php-fpm', 'php-mysql' ]
+    
+# Nginx Configuration
+    - name: Sets Nginx conf file
       template:
-        src: templates/index.html.j2
-        dest: /usr/share/nginx/html/index.html
-        mode: 0644
+        src: "files/nginx.conf.j2"
+        dest: "/etc/nginx/sites-available/{{ http_conf }}"
 
-    - name: Restart nginx
+    - name: Enables new site
+      file:
+        src: "/etc/nginx/sites-available/{{ http_conf }}"
+        dest: "/etc/nginx/sites-enabled/{{ http_conf }}"
+        state: link
+      notify: Reload Nginx
+    
+    - name: Removes "default" site
+      file:
+        path: "/etc/nginx/sites-enabled/default"
+        state: absent
+      notify: Reload Nginx
+
+# MySQL Configuration
+    - name: Sets the root password 
+      mysql_user: 
+        name: root 
+        password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Removes all anonymous user accounts
+      mysql_user:
+        name: ''
+        host_all: yes
+        state: absent
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+
+    - name: Removes the MySQL test database
+      mysql_db: 
+        name: test 
+        state: absent
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+
+# UFW Configuration
+    - name: "UFW - Allow HTTP on port {{ http_port }}"
+      ufw:
+        rule: allow
+        port: "{{ http_port }}"
+        proto: tcp
+
+# Sets Up PHP Info Page
+    - name: Sets Up PHP Info Page
+      template:
+        src: "files/info.php.j2"
+        dest: "/var/www/html/info.php"
+
+# Sets UP index.php Page    
+    - name: Sets Up PHP Info Page
+      template:
+        src: "files/index.php.j2"
+        dest: "/var/www/html/index.php"
+    - name: Transfer the Purge script
+      copy: src=files/app-purge.sh dest=/tmp/app-purge.sh mode=0775
+  
+  handlers:
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded
+
+    - name: Restart Nginx
       service:
         name: nginx
         state: restarted
-      notify: Check HTTP Service
-
-    - name: Open CentOS firewall for Nginx
-      firewalld:
-        service: http
-        permanent: true
-        state: enabled
-      when: ansible_distribution == 'CentOS'
-      notify: Reload Firewall
-
-  # Handlers: handlers that are executed as a notify key from a task
-  handlers:
-    - name: Check HTTP Service
-      uri:
-        url: http://{{ ansible_default_ipv4.address }}
-        status_code: 200
-
-    - name: Reload Firewall
-      service:
-        name: firewalld
-        state: reloaded
-
-# Three dots indicate the end of a YAML document
-...
