@@ -20,15 +20,15 @@
         "ami_name": "ubuntu-{{user `build_name`}}-{{ isotime | clean_ami_name }}",
         "associate_public_ip_address": true,
         "source_ami_filter": {
-          "filters": {
-          "virtualization-type": "hvm",
-          "name": "ubuntu/images/\*ubuntu-xenial-16.04-amd64-server-\*",
-          "root-device-type": "ebs"
-          },
-          "owners": ["099720109477"],
-          "most_recent": true
+            "filters": {
+            "virtualization-type": "hvm",
+            "name": "ubuntu/images/\*ubuntu-focal-20.04-amd64-server-\*",
+            "root-device-type": "ebs"
+            },
+            "most_recent": true,
+            "owners": ["099720109477"]
         }
-     }
+      }
     ],
     "provisioners": [
       {
