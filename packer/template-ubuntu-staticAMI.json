@@ -25,13 +25,13 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "packer/scripts/install_ansible_ubuntu.sh"
+      "script": "scripts/install_ansible_ubuntu.sh"
     },
     {
       "type": "ansible-local",
-      "playbook_file": "ansible/playbook.yml",
+      "playbook_file": "../ansible/playbook.yml",
       "role_paths": [
-        "ansible/roles"
+        "../ansible/roles"
       ]
     }
   ]
