@@ -29,12 +29,12 @@
     },
     {
       "type": "file",
-      "source": "ansible/vars",
+      "source": "../ansible/vars",
       "destination": "/tmp/vars"
     },
     {
       "type": "file",
-      "source": "ansible/files",
+      "source": "../ansible/files",
       "destination": "/tmp/files"
     },
     {
