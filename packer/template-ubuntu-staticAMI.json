@@ -40,7 +40,7 @@
     {
       "type": "ansible-local",
       "playbook_file": "../ansible/playbook.yml",
-      "extra_arguments": [ "--extra-vars", "Region={{user `region`}} Stage={{user `Stage`}}" ]
+      "extra_arguments": [ "--extra-vars", "Region={{user `region`}}" ]
     }
   ]
 }
