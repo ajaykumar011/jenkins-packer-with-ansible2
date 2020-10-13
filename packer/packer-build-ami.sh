@@ -1,12 +1,15 @@
 #!/bin/bash -xe
+set -e
+#This will cause the shell to exit immediately if a simple command exits with a nonzero exit value.
 
 ## Packer Log to be stored in file too ##
 #If you want to log the script output
 #exec > >(tee /tmp/packer-script.log|logger -t packer-script -s 2>/dev/console) 2>&1
 
 AWS_REGION="us-east-1"
-echo $PWD
+echo "I am under ${PWD}"
 ARTIFACT=`packer build -machine-readable template-ubuntu-static.json | awk -F, '$0 ~/artifact,0,id/ {print $6}'`
+if [ -z $ARTIFACT ]; then exit 1 && echo "Packer Build is successful"
 echo "packer output:"
 cat template-ubuntu-static.json
 

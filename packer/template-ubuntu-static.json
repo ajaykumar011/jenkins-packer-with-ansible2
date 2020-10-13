@@ -7,7 +7,8 @@
     "ssh_username": "ubuntu",
     "base_ami": "ami-013da1cc4ae87618c",
     "instance_type": "t2.micro",
-    "image_type": "test"    
+    "image_type": "test",
+    "build_name": "{{env `BUILD_NAME`}}"    
 },
 "builders": [
     {
@@ -18,7 +19,7 @@
       "source_ami": "{{user `base_ami`}}",
       "instance_type": "{{user `instance_type` }}",
       "ssh_username": "{{user `ssh_username`}}",
-      "ami_name": "ubuntu-test",
+      "ami_name": "ubuntu-{{user `build_name`}}-{{ isotime | clean_ami_name }}",
       "associate_public_ip_address": true
     }
   ],

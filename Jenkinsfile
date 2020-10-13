@@ -33,13 +33,18 @@ pipeline {
             steps {
                 script {
                     dir('packer')
-                   {
-                    sh 'chmod +x packer-build-ami.sh'
-                    echo 'I am inside packer'
-                    sh 'sudo ./packer-build-ami.sh'
-                   }
+                        {
+                        sh 'chmod +x packer-build-ami.sh'
+                        echo 'I am inside packer'
+                        def result = sh returnStatus: true, script: './packer-build-ami.sh'
+                        if (result != 0) {
+                            echo '[PACKER: FAILURE] Failed to build AMI'
+                            currentBuild.result = 'FAILURE'
+                            sh "exit ${result}"  
+                            }
+                        }
                 }
-             }
+            }
         }
 
         stage('Set Terraform path') {
