@@ -43,7 +43,6 @@
     {
       "type": "ansible-local",
       "playbook_file": "../ansible/playbook.yml",
-      "playbook_dir": "ansible",
       "extra_arguments": [ "--extra-vars", "Region={{user `region`}}" ]
     }
   ]
