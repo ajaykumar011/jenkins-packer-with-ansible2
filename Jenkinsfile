@@ -20,7 +20,8 @@ pipeline {
                 script{
                     //git branch: 'Your Branch name', credentialsId: 'Your crendiatails', url: ' Your BitBucket Repo URL '
                     // Branch name is master in this repo
-                    git branch: 'main', credentialsId: 'github-cred', url: 'https://github.com/ajaykumar011/jenkins-packer-with-ansible2/'
+                    //git branch: 'main', credentialsId: 'github-cred', url: 'https://github.com/ajaykumar011/jenkins-packer-with-ansible2/'
+                    git branch: 'main', url: 'https://github.com/ajaykumar011/jenkins-packer-with-ansible2/'
                     echo 'Pulling... ' + env.GIT_BRANCH
                     sh 'printenv'
                    //sh "ls -la ${pwd()}"  
