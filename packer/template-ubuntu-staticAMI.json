@@ -28,8 +28,19 @@
       "script": "scripts/install_ansible_ubuntu.sh"
     },
     {
+      "type": "file",
+      "source": "vars",
+      "destination": "/tmp/vars"
+    },
+    {
+      "type": "file",
+      "source": "files",
+      "destination": "/tmp/files"
+    },
+    {
       "type": "ansible-local",
-      "playbook_file": "../ansible/playbook.yml"
+      "playbook_file": "../ansible/playbook.yml",
+      "extra_arguments": [ "--extra-vars", "Region={{user `region`}} Stage={{user `Stage`}}" ]
     }
   ]
 }
