@@ -29,11 +29,6 @@
     },
     {
       "type": "file",
-      "source": "../ansible/vars",
-      "destination": "/tmp/vars"
-    },
-    {
-      "type": "file",
       "source": "../ansible/files",
       "destination": "/tmp/files"
     },
