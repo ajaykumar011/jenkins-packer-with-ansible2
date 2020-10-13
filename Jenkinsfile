@@ -82,8 +82,11 @@ pipeline {
             steps {
                 echo "Hello, ${PERSON}, nice to meet you."
                 sh 'terraform destroy -auto-approve'
+                dir('packer')
+                {
                 sh 'chmod +x packer-destroy.sh'
                 sh 'sudo ./packer-destroy.sh'
+                }
             }
             when { 
                 environment name: 'INFRA-DEL', value: 'Yes'
