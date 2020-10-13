@@ -31,21 +31,20 @@ pipeline {
 
         stage('Packer-AMI-Builder') {
             steps {
-                script {
-                    // Get the Terraform tool.
-                    //def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
-                    //sh 'packer --version'
+                steps {
+                    dir('packer')
+                   {
                     sh 'chmod +x packer-build-ami.sh'
-                    echo 'I am Packer here'
+                    echo 'I am inside packer'
                     sh 'sudo ./packer-build-ami.sh'
-                    
+                   }
                 }
              }
         }
 
         stage('Set Terraform path') {
             steps {
-                script {
+                script {  // script is used for complex scripts, loops, conditions elese use steps
                     // Get the Terraform tool.
                     //def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
                     def tfHome = tool name: 'Terraform'
