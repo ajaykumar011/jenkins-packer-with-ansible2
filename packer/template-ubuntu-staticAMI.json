@@ -7,7 +7,8 @@
     "ssh_username": "ubuntu",
     "base_ami": "ami-013da1cc4ae87618c",
     "instance_type": "t2.micro",
-    "image_type": "test"
+    "image_type": "test",
+    "interpreter": "/usr/bin/python3"
 },
 "builders": [
     {
@@ -40,7 +41,7 @@
     {
       "type": "ansible-local",
       "playbook_file": "../ansible/playbook.yml",
-      "extra_arguments": [ "--extra-vars", "Region={{user `region`}}" ]
+      "extra_arguments": [ "--extra-vars", "Region={{user `region`}} ansible_python_interpreter={{user `interpreter`}}" ]
     }
   ]
 }
