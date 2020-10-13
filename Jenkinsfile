@@ -36,7 +36,7 @@ pipeline {
                         {
                         sh 'chmod +x packer-build-ami.sh'
                         echo 'I am inside packer'
-                        def result = sh returnStatus: true, script: './packer-build-ami.sh'
+                        def result = sh returnStatus: true, script: 'sudo ./packer-build-ami.sh'
                         if (result != 0) {
                             echo '[PACKER: FAILURE] Failed to build AMI'
                             currentBuild.result = 'FAILURE'
