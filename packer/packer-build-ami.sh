@@ -5,9 +5,10 @@
 #exec > >(tee /tmp/packer-script.log|logger -t packer-script -s 2>/dev/console) 2>&1
 
 AWS_REGION="us-east-1"
+echo $PWD
 ARTIFACT=`packer build -machine-readable template-ubuntu-static.json | awk -F, '$0 ~/artifact,0,id/ {print $6}'`
 echo "packer output:"
-cat packer-demo.json
+cat template-ubuntu-static.json
 
 AMI_ID=`echo $ARTIFACT | cut -d ':' -f2`
 echo "AMI ID: ${AMI_ID}"
