@@ -5,7 +5,6 @@
 #exec > >(tee /tmp/packer-script.log|logger -t packer-script -s 2>/dev/console) 2>&1
 
 AWS_REGION="us-east-1"
-cd packer
 ARTIFACT=`packer build -machine-readable template-ubuntu-static.json | awk -F, '$0 ~/artifact,0,id/ {print $6}'`
 echo "packer output:"
 cat packer-demo.json
