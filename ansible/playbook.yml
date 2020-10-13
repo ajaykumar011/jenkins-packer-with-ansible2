@@ -4,8 +4,8 @@
 ---
 - hosts: all
   become: true
-  vars_../files:
-    - vars/default.yml
+  vars_files:
+    - ../vars/default.yml
 
   tasks:
     - name: Install Prerequisites
