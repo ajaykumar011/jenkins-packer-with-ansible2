@@ -31,7 +31,7 @@ pipeline {
 
         stage('Packer-AMI-Builder') {
             steps {
-                steps {
+                script {
                     dir('packer')
                    {
                     sh 'chmod +x packer-build-ami.sh'
