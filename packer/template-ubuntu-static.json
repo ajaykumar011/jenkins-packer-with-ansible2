@@ -20,11 +20,18 @@
       "instance_type": "{{user `instance_type` }}",
       "ssh_username": "{{user `ssh_username`}}",
       "ami_name": "ubuntu-{{user `build_name`}}-{{ isotime | clean_ami_name }}",
-      "associate_public_ip_address": true
+      "associate_public_ip_address": true,
+      "tags": {
+        "Name": "AWS LAMP Packer",
+        "CreationDate": "{{timestamp}}",
+        "Builder": "Packer",
+        "Provisioner": "Ansible"
+      }
     }
   ],
   "provisioners": [
     {
+      "execute_command": "echo 'ubuntu' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
       "type": "shell",
       "script": "scripts/install_ansible_ubuntu.sh"
     },
@@ -36,6 +43,7 @@
     {
       "type": "ansible-local",
       "playbook_file": "../ansible/playbook.yml",
+      "playbook_dir": "ansible",
       "extra_arguments": [ "--extra-vars", "Region={{user `region`}}" ]
     }
   ]
